@@ -14,7 +14,7 @@ if (args.length > 0) {
     }
     try {
       // Execute the contents of the file as a module
-      const result = require(filename);
+      const result = eval(data);
       console.log(result);
     } catch (error) {
       console.error(`Error executing file: ${error}`);
