@@ -4,8 +4,8 @@ function initializeRooms() {
   const sizes = [19, 20, 34];
   const classrooms = [];
 
-  for (let i = 0; i < sizes.length; i++) {
-    classrooms.push(new ClassRoom(sizes[i]));
+  for (const size of sizes) {
+    classrooms.push(new ClassRoom(size));
   }
 
   return classrooms;
