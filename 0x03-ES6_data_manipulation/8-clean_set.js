@@ -4,8 +4,8 @@ function cleanSet(set, startString) {
   }
 
   const resultArray = Array.from(set)
-    .filter((item) => item.startsWith(startString))
-    .map((item) => item.substring(startString.length));
+    .filter((item) => (item !== undefined ? item.startsWith(startString) : ''))
+    .map((item) => (item !== undefined ? item.substring(startString.length) : ''));
 
   return resultArray.join('-');
 }
