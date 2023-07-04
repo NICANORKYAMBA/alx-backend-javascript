@@ -5,7 +5,7 @@ function cleanSet(set, startString) {
 
   const resultArray = Array.from(set)
     .filter((item) => item.startsWith(startString))
-    .map((item) => item.slice(startString.length));
+    .map((item) => item.substring(startString.length));
 
   return resultArray.join('-');
 }
