@@ -1,6 +1,9 @@
 const fs = require('fs');
 
 function countStudents(path) {
+  // Initialize an object to store the counts for each field 
+  const fieldCounts = {};
+
   try {
     // Read the database file synchronously
     const data = fs.readFileSync(path, 'utf8');
@@ -9,9 +12,6 @@ function countStudents(path) {
     const lines = data.split('\n').filter((line, index) => {
       return index > 0 && line.trim() !== '';
     });
-
-    // Initialize an object to store the counts for each field
-    const fieldCounts = {};
 
     // Loop through each line to count students in each field
     for (const line of lines) {
@@ -25,7 +25,7 @@ function countStudents(path) {
         } else {
           fieldCounts[field] = {
             count: 1,
-            students: [firstName]
+            students: [firstName],
           };
         }
       }
