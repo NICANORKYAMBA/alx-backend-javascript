@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function countStudents(path) {
-  // Initialize an object to store the counts for each field 
+  // Initialize an object to store the counts for each field
   const fieldCounts = {};
 
   try {
