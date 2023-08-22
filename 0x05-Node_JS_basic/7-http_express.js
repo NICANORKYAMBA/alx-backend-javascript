@@ -1,79 +1,63 @@
 const express = require('express');
-const fs = require('fs').promises;
 
-// Create an Express application
+const { readFile } = require('fs');
+
 const app = express();
+const port = 1245;
 
-// Define a route for the root endpoint "/"
+function countStudents(fileName) {
+  const students = {};
+  const fields = {};
+  let length = 0;
+  return new Promise((resolve, reject) => {
+    readFile(fileName, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        let output = '';
+        const lines = data.toString().split('\n');
+        for (let i = 0; i < lines.length; i += 1) {
+          if (lines[i]) {
+            length += 1;
+            const field = lines[i].toString().split(',');
+            if (Object.prototype.hasOwnProperty.call(students, field[3])) {
+              students[field[3]].push(field[0]);
+            } else {
+              students[field[3]] = [field[0]];
+            }
+            if (Object.prototype.hasOwnProperty.call(fields, field[3])) {
+              fields[field[3]] += 1;
+            } else {
+              fields[field[3]] = 1;
+            }
+          }
+        }
+        const l = length - 1;
+        output += `Number of students: ${l}\n`;
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'field') {
+            output += `Number of students in ${key}: ${value}. `;
+            output += `List: ${students[key].join(', ')}\n`;
+          }
+        }
+        resolve(output);
+      }
+    });
+  });
+}
+
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
-
-// Define a route for the "/students" endpoint
-app.get('/students', async (req, res) => {
-  try {
-    // Get the database file name from command line arguments
-    const databaseFileName = process.argv[2];
-
-    if (!databaseFileName) {
-      res.status(500).send('Internal Server Error: Database file not provided.');
-      return;
-    }
-
-    // Read the database file asynchronously
-    const data = await fs.readFile(databaseFileName, 'utf8');
-
-    // Split the file into lines and filter out empty lines and the header row
-    const lines = data.split('\n').filter((line, index) => index > 0 && line.trim() !== '');
-
-    // Initialize an object to store the counts for each field
-    const fieldCounts = {};
-
-    // Loop through each line to count students in each field
-    for (const line of lines) {
-      const fields = line.split(',');
-      const [firstName, , , field] = fields;
-
-      if (field) {
-        if (fieldCounts[field]) {
-          fieldCounts[field].count += 1;
-          fieldCounts[field].students.push(firstName);
-        } else {
-          // Initialize count to 1 and students as an array with the first name
-          fieldCounts[field] = {
-            count: 1,
-            students: [firstName],
-          };
-        }
-      }
-    }
-
-    // Prepare the response
-    let response = 'This is the list of our students\n';
-
-    // Log the total number of students
-    response += `Number of students: ${lines.length}\n`;
-
-    // Log the counts for each field
-    for (const field in fieldCounts) {
-      if (Object.prototype.hasOwnProperty.call(fieldCounts, field)) {
-        const { count, students } = fieldCounts[field];
-        response += `Number of students in ${field}: ${count}. List: ${students.join(', ')}\n`;
-      }
-    }
-
-    // Send the response without a newline character at the end
-    res.send(response.trim());
-  } catch (error) {
-    res.status(500).send(`Internal Server Error: ${error.message}\n`);
-  }
+app.get('/students', (req, res) => {
+  countStudents(process.argv[2].toString()).then((output) => {
+    res.send(['This is the list of our students', output].join('\n'));
+  }).catch(() => {
+    res.send('This is the list of our students\nCannot load the database');
+  });
 });
 
-// Start the HTTP server and listen on port 1245
-const port = 1245;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
 
-// Export the Express app
 module.exports = app;
