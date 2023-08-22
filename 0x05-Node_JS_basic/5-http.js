@@ -32,6 +32,7 @@ function countStudents(path) {
           }
         }
 
+        // Resolve with the fieldCounts object
         resolve(fieldCounts);
       }
     });
@@ -52,24 +53,25 @@ const app = http.createServer((req, res) => {
 
     countStudents(databaseFileName)
       .then((fieldCounts) => {
+        const csCount = fieldCounts.CS ? fieldCounts.CS.count : 0;
+        const sweCount = fieldCounts.SWE ? fieldCounts.SWE.count : 0;
+        const csStudents = fieldCounts.CS ? fieldCounts.CS.students.join(', ') : '';
+        const sweStudents = fieldCounts.SWE ? fieldCounts.SWE.students.join(', ') : '';
+
         const response = `This is the list of our students\nNumber of students: ${
-          fieldCounts ? fieldCounts.CS.count + fieldCounts.SWE.count : 0
-        }\nNumber of students in CS: ${
-          fieldCounts ? fieldCounts.CS.count : 0
-        }. List: ${fieldCounts ? fieldCounts.CS.students.join(', ') : ''}\nNumber of students in SWE: ${
-          fieldCounts ? fieldCounts.SWE.count : 0
-        }. List: ${fieldCounts ? fieldCounts.SWE.students.join(', ') : ''}`;
+          csCount + sweCount
+        }\nNumber of students in CS: ${csCount}. List: ${csStudents}\nNumber of students in SWE: ${sweCount}. List: ${sweStudents}`;
 
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end(response);
       })
       .catch((error) => {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end(`Internal Server Error: ${error.message}`);
+        res.end(`Internal Server Error: ${error.message}\n`);
       });
   } else {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
+    res.end('Not Found\n');
   }
 });
 
