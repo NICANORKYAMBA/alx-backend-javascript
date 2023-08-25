@@ -1,19 +1,17 @@
 function calculateNumber (type, a, b) {
-  if (type === 'SUM') {
-    return Math.round(a) + Math.round(b);
-  } else if (type === 'SUBTRACT') {
-    return Math.round(a) - Math.round(b);
-  } else if (type === 'DIVIDE') {
-    const aRounded = Math.round(a);
-    const bRounded = Math.round(b);
+	const a_rounded = Math.round(a);
+	const b_rounded = Math.round(b);
 
-    if (bRounded === 0) {
-      return 'Error';
-    } else {
-      return aRounded / bRounded;
-    }
+  if (type === 'SUM') {
+    return a_rounded + b_rounded;
+  } else if (type === 'SUBTRACT') {
+    return a_rounded - b_rounded;
+  } else if (type === 'DIVIDE') {
+      return a_rounded / b_rounded;
+  } else if (b_rounded === 0) {
+	  return 'Error';
   } else {
-    return 'Error';
+	  return 'Error';
   }
 }
 
