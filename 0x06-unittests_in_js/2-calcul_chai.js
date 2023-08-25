@@ -4,14 +4,17 @@ function calculateNumber (type, a, b) {
 
   if (type === 'SUM') {
     return aRounded + bRounded;
-  } else if (type === 'SUBTRACT') {
+  }
+  
+  if (type === 'SUBTRACT') {
     return aRounded - bRounded;
-  } else if (type === 'DIVIDE') {
+  }
+  
+  if (type === 'DIVIDE') {
+    if (bRounded === 0) {
+      return 'Error';
+    }
     return aRounded / bRounded;
-  } else if (bRounded === 0) {
-    return 'Error';
-  } else {
-    return 'Error';
   }
 }
 

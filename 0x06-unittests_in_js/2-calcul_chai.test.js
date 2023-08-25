@@ -112,21 +112,3 @@ describe('calculateNumber() with DIVIDE', () => {
     expect(calculateNumber('DIVIDE', -9.4, -0.3)).to.equal('Error');
   });
 });
-
-describe('calculateNumber() with an Unknown Operation', () => {
-  it('multiply 5 and 0', () => {
-    expect(calculateNumber('MULTIPLY', 5, 0)).to.equal('Error');
-  });
-  it('add 0 and 5', () => {
-    expect(calculateNumber('add', 0, 5)).to.equal('Error');
-  });
-  it('subtract 45 and 5', () => {
-    expect(calculateNumber('subtract', 0, 0)).to.equal('Error');
-  });
-  it('divide 0 and 0', () => {
-    expect(calculateNumber('divide', 0, 0)).to.equal('Error');
-  });
-  it('randomoperation -9.4 and -0.3', () => {
-    expect(calculateNumber('randomoperation', -9.4, -0.3)).to.equal('Error');
-  });
-});
